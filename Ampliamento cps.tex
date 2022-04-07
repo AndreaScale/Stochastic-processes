@@ -1,0 +1,168 @@
+\section{Elementi di calcolo delle probabilità}
+\subsection{Funzione generatrice congiunta}
+Si inizia introducendo un concetto non affrontato nel corso di CPS dell'a.a 2020/2021, la \textit{funzione generatrice congiunta}.
+
+\begin{definition}
+Date $(X_i)$ per $i=1,...,n$ vettore aleatorio si definisce \textbf{funzione generatrice congiunta} la seguente:
+
+    \begin{alignat}{4}
+\Phi:\; && \mathbb{R}^n && \;\to\;     & \mathbb{R} \\
+     && \underline{t}    && \;\mapsto\; & \Phi(\underline{t})
+\end{alignat}
+Dove $\Phi(\underline{t})=\mathbb{E}[exp(\sum_{i=1}^nt_iX_i)]$.
+\end{definition}
+
+Come esercizio si può calcolare la normale multivariata di $(X_i)$ per $i=1,...,n$ dove $X_i=\sum_{j=1}^na_jZ_j+b_i$ con $Z_j$ gaussiane standard $\forall j=1,...,m$.
+
+\subsection{Non esistenza della funzione di densità}
+Osserviamo una v.a. $X$ normale. La sua funzione caratteristica è:
+\begin{equation} \label{char_N}
+    \Phi(t)=e^{t\mu+\frac{t^2\sigma^2}{2}}
+\end{equation}
+Mentre la sua funzione di distribuzione è:
+\begin{equation}
+    f_X(t)=\frac{1}{\sqrt{2\pi \sigma^2}}e^{\frac{(t-\mu)^2}{2\sigma^2}}
+\end{equation}
+Osserviamo che se facciamo tendere a zero la varianza ($\sigma^2\rightarrow 0$) la funzione caratteristica rimane definita ($\Phi(t)=e^{t\mu}$), mentre la funzione di densità risulta indefinita. In particolare, quando la varianza tende a zero, tutta la massa di probabilità si concentra in un punto, situazione descritta dalla \href{https://en.wikipedia.org/wiki/Dirac_delta_function}{Delta di Dirac}.
+
+\begin{definition}
+Si definisce \textbf{tasso di rottura} (\textit{faliure/hazard rate}) di una variabile aletoria $X$ la funzione:
+\[r(t)=\frac{f_x(t)}{\overline{F}_X(t)}\]
+\end{definition}
+
+Dato il tasso di rottura di una v.a. possiamo ricondurci alla sua distribuzione:
+\[r(t)=\frac{f_x(t)}{\overline{F}_X(t)}=\frac{\frac{d}{dt}\left(F_X(t)\right)}{1-F_X(t)}\]
+Quindi:
+\[\frac{1}{1-F}dF=r(t)dt \Rightarrow \int_0^t\frac{1}{1-F}dF=\int_0^t r(t)dt \Rightarrow -ln(1-F(t))=\int_0^t r(t)dt\]
+Ottenendo:
+\[F_X(t)=1-e^{-\int_0^t r(t)dt}\]
+\subsection{Condizionamenti}
+
+Poste $X,Y$ v.a. ho che:
+\begin{equation}
+    \mathbb{P}(X|Y=y)
+\end{equation}
+è una distribuzione di probabilità. Infatti:
+\begin{itemize}
+    \item $\sum_x \mathbb{P}(X=x|Y=y)= \frac{\sum_x \mathbb{P}(X=x,Y=y)}{\mathbb{P}(Y=y)}=\frac{\mathbb{P}(Y=y)}{\mathbb{P}(Y=y)}=1$
+    \item $\mathbb{P}(X=x|Y=y)\geq0$
+\end{itemize}
+Si può quindi definire il valore atteso, detto \textbf{attesa condizionata}:
+\begin{equation}
+    \mathbb{E}(X|Y=y)=\sum_{x}x\mathbb{P}(X=x|Y=y)
+\end{equation}
+Si osserva immediatamente che l'attesa condizionata è una funzione di y: $\varphi(y)$.
+Per esercizio si può calcolare l'attesa condizionata per due Poisson di parametri distinti o per due binomiali di stesso parametro (IID).
+
+Nel continuo si ha un problema nella definzione della funzione di probabilità, poichè seguendo la definizione di probabilità condizionata si ha uno zero al denominatore (dato da $\mathbb{P}(Y=y)=0$). Per definire la funzione di probabilità ci serviamo quindi di un intorno di $y$ e applichiamo successivamente il teorema di de l'Hôpital.
+
+    \[\mathbb{P}(X\leq x|Y\in[y,y+h])=\frac{\mathbb{P}(X\leq x,Y\in[y,y+h])}{\mathbb{P}(Y\in[y,y+h])}=
+    \frac{\int_{-\infty}^x\int_y^{y+h}f_{X,Y}(x,y) \, dxdy}{\int_y^{y+h}f_Y(y) \,dy}\]
+Applicando dunque de l'Hôpital si ottiene:
+    \[\lim_{h\to 0}\mathbb{P}(X\leq x|Y\in[y,y+h])=\frac{\int_{-\infty}^xf_{X,Y}(x,y) \,dx}{f_Y(y)}=\int_{-\infty}^x\frac{f_{X,Y}(x,y)}{f_Y(y)} \, dx\]
+Osservando che per la continuità a destra della funzione di proabilità vale:
+\[\mathbb{P}(x\leq x|Y=y)=\lim_{h\to0}\mathbb{P}(X\leq x|Y\in[y,y+h])\]
+Si ottiene che la funzione di ripartizione di $X$ condizionata a $Y=y$:
+\begin{equation}
+    f_{X|Y}(x,y)=\frac{f_{X,Y}(x,y)}{f_Y(y)}
+\end{equation}
+Si verifica facilmente che si tratta di una funzione di ripartizione. E' inoltre ovvia l'estesione dell'attesa condizionata al caso continuo. Per esercizio si può calcolare l'attesa condizionata di $X$ rispetto a $Y=y$ nei due seguenti casi:
+\begin{itemize}
+    \item $f_{X,Y}(x,y)=6xy(2-x-y)$ per $(x,y)\in(0,1)\times(0,1)$
+    \item $f_{X,Y}(x,y)=\frac{1}{2}ye^{-xy}$ per $y\in(0,2) , x\in\mathbb{R}_+$
+\end{itemize}
+
+Date due varibili aleatorie $X,Y$ ci concentriamo ora sul significato dell'oggetto:
+\begin{equation} \label{E(X|Y)}
+    \mathbb{E}(X|Y)
+\end{equation}
+Ci ricordiamo che $\mathbb{E}(X|Y=y)=\varphi(y)$ è una funzione di $y$, che conserva le ipotesi di misurabilità. Dunque $\mathbb{E}(X|Y)$ è una \textbf{variabile aleatoria}, il cui supporto è l'immagine attraverso $\varphi$ del supporto di $Y$ ($\varphi(S_Y)$). Un fondamentale teorema che ci viene in contro, e che ci fa capire l'importanza della variabile aleatoria costruita in \ref{E(X|Y)} è il seguente.
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}ar}
+
+\begin{theorem}[Doppia attesa]
+Siano $X,Y$ v.a. tali che $\mathbb{E}X$ esista, allora:
+\begin{equation}
+    \mathbb{E}X=\mathbb{E}[\mathbb{E}(X|Y)]
+\end{equation}
+\begin{proof}
+Caso discreto:
+\[ \E[\E(X|Y)]=\sum_y \E(X|Y=y)\mathbb{P}(Y=y)=\sum_y\sum_x x\mathbb{P}(X=x|Y=y)\mathbb{P}(Y=y)\]
+\[=\sum_x x\sum_y\mathbb{P}(X=x,Y=y)=\sum_x x\mathbb{P}(X=x)=\E X \]
+Caso continuo:
+\[ \E[\E(X|Y)]=\int_{\mathbb{R}}\E(X|Y=y)f_Y(y) \,dy=\int\int_{\mathbb{R}^2}x f_{X|Y}(x,y)f_Y(y) \,dxdy \]
+\[\int_{\mathbb{R}}x \int_{\mathbb{R}}f_{X,Y}(x,y) \,dy \,dx=\int_{\mathbb{R}}x f_X(x) \,dx =\E X \]
+\end{proof}
+\end{theorem}
+
+Si provino i seguenti come esercizi:
+\begin{itemize}
+    \item Calcolare il valore atteso di una geometrica condizionando (il valore atteso) con una v.a: $$Y= 
+    \begin{cases}
+    0 & \text{Primo esito insuccesso}
+    \\ 1 & \text{Primo esito successo}
+    \end{cases}$$
+    Tenendo presente che il valore atteso, sapendo che il primo esito è un \textit{insuccesso}, è il valore atteso della v.a. più 1.
+    \item Ci sono 3 porte:
+    \begin{enumerate}
+        \item Ci vogliono 2 ore e si è salvi
+        \item Ci voglio 3 ore e si torna alle porte
+        \item Ci volgio 5 ore e si torna alle porte
+    \end{enumerate}
+    Ogni volta che si torna alle porte non ci si ricorda la scelta precendete. Qual è il tempo medio di attesa per uscire. La scelta della porta è casuale ($p=\frac{1}{3}$). (Si consiglia di condizionare sulla scelta della porta. \textit{Il risultato è 10 ore}).
+\end{itemize}
+
+Ci poniamo invece ora in una situzione comune, siano $(X_i)$ v.a. IID con $\E X_i=\E X$ e $N$ v.a. Poniamo $Y=\sum_{i=0}^NX_i$ e calcoliamone il valore atteso.
+
+\[\E Y=\E[\E(\sum_{i=0}^N X_i|N)]=\sum_n\E(\sum_{i=0}^N X_i|N=n)\mathbb{P}(N=n)=\sum_n\E(\sum_{i=0}^n X_i)\mathbb{P}(N=n)\]
+\[\sum_n \sum_{i=0}^n\E X_i \cdot\mathbb{P}(N=n)=\sum_n n\cdot\E X\cdot \mathbb{P}(N=n)=\E X\cdot\E N\]
+Si lascia da verificare che $\mathbb{V}arY = \mathbb{V}arX\cdot\E N+\E^2X\cdot\mathbb{V}arN$.
+
+\begin{theorem}\label{Varr}
+Siano $X,Y$ v.a. vale:
+\begin{equation}
+    \V X=\E[\V(X|Y)]+\V[\E(X|Y)]
+\end{equation}
+\begin{proof}
+Si noti che, come per l'attesa condizionata anche $\V (X|Y)$ è una variabile aleatoria. Ha quindi senso calcolarne il valore atteso. Ora il primo addendo si scompone in:
+\[\E[\V(X|Y)]=\E[\E(X^2|Y)-\E^2(X|Y)]=\E X^2-\E[\E^2(X|Y)]\]
+Mentre il secondo addendo:
+\[\V[\E(X|Y)]=\E[\E^2(X|Y)]-\E^2[\E(X|Y)]=\E[\E^2(X|Y)]-\E^2(X)\]
+Sommando quindi i due addendi segue la tesi.
+\end{proof}
+\end{theorem}
+\subsection{Mancanza di memoria}
+Ricordiamo che la v.a. esponenziale gode della propietà di \textit{mancanza di memoria}, o e \textit{priva di usura}. Vale a dire, sia $X\sim Exp(\lambda)$:
+\begin{equation} \label{Manc_mem}
+\mathbb{P}(X>t+r|X>r)=\mathbb{P}(X>t)
+\end{equation}
+$\forall t,r\in\mathbb{R}$. 
+
+La condizione \ref{Manc_mem} equivale a:
+\[\mathbb{P}(X>t+s)=\mathbb{P}(X>t)\mathbb{P}(X>s)\]
+\begin{proposition}
+La distribuzione esponenziale è l'unica distribuzione continua priva di usura.
+\begin{proof}
+Sia $X$ v.a. e $\overline{F}_X(x)=\mathbb{P}(X>x)$. Chiamiamo $g:=\overline{F}$, e otteniamo: $g(x+y)=g(x)g(y)$ , $\forall x,y\in\mathbb{R}$.
+Si dimostra per induzione che:
+    \[g\left(\frac{m}{n}\right)=\left[g\left(\frac{1}{n}\right)\right]^m\]
+Ora:
+\[g(1)=g\left(\frac{n}{n}\right)=\left[g\left(\frac{1}{n}\right)\right]^n\]
+Ottenendo: \label{Eq_dim_exp}
+\[g\left(\frac{m}{n}\right)=g(1)^{\frac{m}{n}}\]
+Per la continuità a destra della funzione comulativa di probabilità:  \[g(x)=g(1)^x\] $\forall x\in\mathbb{R}$.
+Poichè $g(1)=g^2\left(\frac{1}{2}\right)\geq 0$ posso considerare:
+\[\lambda=-ln(g(1))\]
+E ottendo così:
+\[F_X(x)=1-\overline{F}_X(x)=1-g(x)=1-e^{-\lambda x}\]
+Dunque se $X$ è priva di usura è necesssariamente un'esponenziale. 
+\end{proof}
+\end{proposition}
+ Ulteriori proprietà dell'esponenziale sono presenttate in quanto segue:
+ \begin{itemize}
+     \item $X_i\sim Exp(\lambda)$ IID $\Rightarrow \sum_{i=0}^nX_i\sim\Gamma(\lambda,n)$
+     \item $X_1\sim Exp(\lambda_1)$ e $X_2\sim Exp(\lambda_2)$ allora $\mathbb{P}(X_1<X_2)=\frac{\lambda_1}{\lambda_1+\lambda_2}$ (Si prova condizionando su $X_1$)
+     \item $X_i\sim Exp(\lambda_i)$ indipendenti allora $min\{X_i\}\sim Exp\left(\sum_i \lambda_i\right)$ (Si prova con $\{min\{X_i\}>x\}=\{X_1>x,\dots,X_n>x\}$)
+     \item $\mathbb{P}(X_i=min\{X_j\})=\frac{\lambda_i}{\sum_j \lambda_j}$ (Si prova con $\{X_i=min\{X_j\}\}=\{X_i<min_{j\neq i}\{X_j\}\}$)
+ \end{itemize}

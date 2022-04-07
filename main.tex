@@ -1,0 +1,98 @@
+\documentclass{book}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{subfiles}
+\usepackage{graphicx}
+\usepackage[scr]{rsfso}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{array,amsfonts}
+\usepackage{magaz}
+\usepackage{amssymb}
+\usepackage[shortlabels]{enumitem}
+\usepackage{lipsum}
+\usepackage[dottedtoc]{classicthesis}
+\usepackage{tocloft}
+\usepackage{cancel}
+\usepackage{movie15}
+\usepackage{blindtext}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{animate}
+
+%-----------------------------------------------------------------------------------------------
+\def\@tocline#1#2#3#4#5#6#7{\relax
+  \ifnum #1>\c@tocdepth % then omit
+  \else
+    \par \addpenalty\@secpenalty\addvspace{#2}%
+    \begingroup \hyphenpenalty\@M
+    \@ifempty{#4}{%
+      \@tempdima\csname r@tocindent\number#1\endcsname\relax
+    }{%
+      \@tempdima#4\relax
+    }%
+    \parindent\z@ \leftskip#3\relax \advance\leftskip\@tempdima\relax
+    \rightskip\@pnumwidth plus4em \parfillskip-\@pnumwidth
+    #5\leavevmode\hskip-\@tempdima #6\nobreak\relax
+    \dotfill\hbox to\@pnumwidth{\@tocpagenum{#7}}\par
+    \nobreak
+    \endgroup
+  \fi}
+  
+\newcommand\myfunc[5]{%
+  \begingroup
+  \setlength\arraycolsep{0pt}
+  #1\colon\begin{array}[t]{c >{{}}c<{{}} c}
+             #2 & \to & #3 \\ #4 & \to & #5 
+          \end{array}%
+  \endgroup}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{proposition}{Proposition}[section]
+\theoremstyle{proposition}
+\newtheorem*{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{observation}{Observation}[section]
+\usepackage{tocloft}
+\renewcommand{\cftchapdotsep}{\cftdotsep}
+
+\begin{document}
+\title{Appunti di Calcolo delle Probabilità 2}
+\author{Andrea Scalenghe}
+\date{Settembre2021}
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+\pdfbookmark[1]{\contentsname}{tableofcontents}
+\setcounter{tocdepth}{2} % <-- 2 includes up to subsections in the ToC
+\setcounter{secnumdepth}{3} % <-- 3 numbers up to subsubsections
+\manualmark
+\markboth{\spacedlowsmallcaps{\contentsname}}{\spacedlowsmallcaps{\contentsname}}
+\tableofcontents
+\automark[section]{chapter}
+\renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\enspace\spacedlowsmallcaps{#1}}}
+\newpage
+\section{Premessa}
+Si presentano qui degli appunti sintetici del corso di Calcolo delle probabiltà 2 tenuto nell' a.a. 2021/2022 nel Dipartimento di Matematica dell'Università di Torino dalla Professoressa Laura Sacerdote.
+
+Il corso di \href{https://www.matematica.unito.it/do/corsi.pl/Show?_id=z1b7}{CP2} si appoggia sulle conoscenze acquisite dagli studenti tramite l'insegnamento di \href{https://www.matematica.unito.it/do/corsi.pl/Show?_id=hffu}{CPS}. Si daranno dunque pregresse delle conoscenze in queste dispense. Nel caso fosse necessario rivedere dei concetti o dimostrazioni si rimanda alla dispense di CPS.
+\part{Intro}
+\chapter{Inizio}
+\input{Intro/Ampliamento cps}
+\part{Processi stocastici}
+\chapter{Catene di Markov}
+\input{Processi_Stocastici/Intro_ps}
+\chapter{Processi di Poisson}
+\input{Processi_Stocastici/Proc_Poi}
+\chapter{Catene di Markov a tempo continuo}
+\input{Processi_Stocastici/Mark_temp_cont}
+\chapter{Moti Browniani}
+\input{Processi_Stocastici/Mot_brow}
+\end{document}

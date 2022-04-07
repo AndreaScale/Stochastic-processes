@@ -1,0 +1,102 @@
+\section{Nascita moto Browniano}
+Iniziamo considerando il cammino casuale unidimensionale simmetrico $p=1/2$. Vogliamo ora adottare una nuova prospettiva sul problema, vederlo più da "\textit{lontano}" riscalandolo tramite intervalli di tempo e spazio sempre più piccoli, infinitesimi. Passando poi al limite otteremo un primo esempio di moto Brownian.
+
+Sia $X(t)$ la posizione al tempo $t$:
+\[X(t)=\Delta x\left(X_1+\dots+X_{\lfloor \frac{t}{\Delta t} \rfloor}\right)\]
+Dove $X_i$ vale più o meno 1 a seconda che il passo $\Delta x$ sia a destra o a sinistra. Tutto il processo è riscalato ad intervallini $\Delta t$. Dunque si ottiene:
+\begin{itemize}
+    \item $\mathbb{E}X(t)=0$
+    \item $\mathbb{V}arX(t)=\left(\Delta x\right)^2\lfloor \frac{t}{\Delta t} \rfloor$
+\end{itemize}
+
+Ma se gli intervalli di spazio e tempo tendono a zero con lo stesso ordine si ottiene una varianza nulla, e dunque il processo si schiaccia sull'asse $x$. Non è evidentemente l'obiettivo di una buona modellizzazione. 
+
+Einstein, in un celebre articolo del 1905, "suggerisce" un approccio diverso, nel quale tra spazio e tempo interrcorre una relazione del tipo:
+\[\Delta x=\sigma\sqrt{\Delta t}\]
+Così facendo si ottiene, tramite il teorema del limite centrale otteniamo:
+\[X(t)\sim N(0,\sigma^2t)\]
+Ecco che otteniamo un moto Browniano. 
+
+Passiamo a una definizione rigorosa.
+
+\begin{definition}
+Un processo stocastico si definisce \textbf{moto Browniano} se:
+\begin{enumerate}
+    \item $X(0)=0$
+    \item Il processo ha incrementi indipendenti e stazionari
+    \item $\forall t>0$ e per un parametro $\sigma^2$ si ha:
+    \[X(t)\sim N(0,\sigma^2t)\]
+    \item Le traiettorie del processo sono continue
+\end{enumerate}
+\end{definition}
+In realtà la condizione (4.) può essere dimostrata dalle altre. Un moto Browniano ha la peculiare proprietà di essere continuo ovunque ma non differenziabile in nessun punto.
+
+La condizione (3.) con la stazionarietà degli incrementi è equivalente a: 
+\[X(t)-X(s)\sim N(0,\sigma^2(t-s)) \hspace{7px} \forall t,s\]
+La condizione (3.) ci fornisce inoltre un importantissima informazione, la distribuzione del moto in un dato momento, in particolare:
+\[f_t(x)=\frac{1}{\sqrt{2\pi\sigma^2 t}}e^{-\frac{x^2}{2\sigma^2t}}\]
+
+Osservando che:
+\[\{X(t_1)=x_1,X(t_2)=x_2,\dots,X(t_n)=x_n\}=\]
+\[\{X(t_1)=x_1-\underbrace{x_0}_{=0},X(t_2)-X(t_1)=x_2-x_1,\dots,X(t_n)-X(t_{n-1})=x_n-x_{n-1}\}\]
+Posso calcolare la densità congiunta (di un moto Browniano tandard, cioè con $\sigma=0$), ricordandomi dell'indipendenza degli intervalli disgiunti:
+\[f(x_1,\dots,x_n)=\frac{1}{(2\pi)^{\frac{n}{2}}[t_1\dots(t_n-t_{n-1})]}e^{-\frac{1}{2}\left[\frac{x_1^2}{t_1}+\dots+\frac{(x_n-x_{n-1})^2}{t_n-t_{n-1}}\right]}\]
+
+\begin{example}[Ponte Browniano]
+Dato un moto browniano standard $\{X(t)\}$ e un $t\in\mathbb{R}_+$ fissato tale che $X(t)=B$, per $s<t$ calcolo:
+\[f_{s|t}(x|B)=\frac{f_{s,t}(x,B)}{f_{s}(x)}=\frac{f_s(x)f_{t-s}(x-B)}{f_t(B)}=K_1exp\left\{-\frac{x^2}{2s}-\frac{(x-B)^2}{2(t-s)}\right\}\]
+\[=K_2exp\left\{-x^2\left(\frac{1}{2s}+\frac{1}{2(t-s)}\right)+\frac{xB}{t-s}\right\}=K_3exp\left\{\frac{-t}{2s(t-s)}\left(x^2-\frac{2xsB}{t}\right)\right\}\]
+\[=K_4exp\left\{\frac{-t}{2s(t-s)}\left(x-\frac{s}{t}B\right)^2\right\}\]
+($K_i$ sono indipendenti da $s$).
+\newline Ottenendo dunque che la distribuzione di probabilità in un ponte browniano è una normale di media e varianza:
+\begin{itemize}
+    \item $\mathbb{E}[X(s)|X(t)=B]=\frac{s}{t}B$
+    \item $\mathbb{V}ar[X(s)|X(t)=B]=\frac{s}{t}(t-s)$
+\end{itemize}
+\end{example}
+
+Altro esempio degno di nota, che richiama la rovina del giocatore (\ref{Rov_gioc}) è il seguente.
+
+\begin{example}
+Sia $T_a=Inf\{t>0:X(t)\geq a\}$ e studiamone la distribuzione:
+\[\mathbb{P}(X(t)\geq a)=\mathbb{P}(X(t)\geq a|T_a\leq t)\mathbb{P}(T_a\leq t)+\mathbb{P}(X(t)\geq a|T_a>t)\mathbb{P}(T_a>t)\]
+Si nota subito che:
+\[\mathbb{P}(X(t)\geq a|T_a > t)=0\]
+E inoltre:
+\[\mathbb{P}(X(t)\geq a|T_a\leq t)=\frac{1}{2}\]
+Questo secondo risultato deriva dal fatto che per simmetria ogni traiettoria sopra ad $a$ ce n'è una sotto.
+
+Si ottiene così:
+\[\mathbb{P}(T_a\leq t)=2\mathbb{P}(X(t)\geq a)\]
+Dunque:
+\[f_{T_a}(t)=\frac{d}{dt}\left[2\int_a^{+\infty}\frac{1}{\sqrt{2\pi\sigma^2 t}}e^{-\frac{x^2}{2\sigma^2t}} \,dx\right]\underset{y=\frac{x}{\sqrt{\sigma^2t}}}{=}\frac{d}{dt}\left[\sqrt{\frac{2}{\pi}}\int_{a/\sqrt{\sigma^2t}}^{+\infty}e^{-\frac{y^2}{2}} \,dy\right]=\]
+\[\frac{a}{\sqrt{2\pi\sigma^2t^3}}e^{\frac{-a^2}{2\sigma^2t}}\]
+\end{example}
+ Da questo risultato si può calcolare la distribuzione di $M:=max_{s=0,\dots,t}\{X(s)\}$. Infatti:
+ \[\frac{d}{da}\mathbb{P}(M\geq a)=\frac{d}{da}\left(\mathbb{P}(T_a\leq t)\right)=\frac{d}{da}\left(2\int_a^{+\infty}\frac{1}{\sqrt{2\pi\sigma^2 t}}e^{-\frac{x^2}{2\sigma^2t}} \,dx\right)=\sqrt{\frac{2}{\pi\sigma^2t}}e^{-\frac{a^2}{2\sigma^2t}}\]
+\subsection{Tipologie di Moti Browniani}
+\begin{definition}
+Un processo stocastico $\{X(t)\}$ è un \textbf{moto browniano con drift} se:
+\begin{itemize}
+    \item $X(0)=0$
+    \item Ha incrementi stazionari e indipendenti
+    \item $X(t)\sim N(\mu t,\sigma^2 t)$
+\end{itemize}
+\end{definition}
+Un moto browniano con drift può anche essere visto come la composizione lineare di un moto browniano standard e un drift $\mu t$ del tipo:
+\[X(t)=\sigma B(t)+\mu t\]
+
+\begin{definition}
+Dato un moto browniano con drift $\{Y(t)\}$ e coefficiente di drift $\mu$ si definisce \textbf{moto browniano geometrico} il seguente:
+\[X(t)=e^{Y(t)}\]
+\end{definition}
+
+Calcoliamo ora il valore atteso di un moto browniano geometrico dat la sua storia siano ad un tempo stabilito:
+\[\mathbb{E}[X(t)|X(u), 0\leq u\leq s] \hspace{25px} \text{per} \hspace{5px} s<t\]
+Per il calcolo si noti che conoscere $Y(u)$ o conoscere $e^{Y(u)}$ è la stessa cosa.
+\[\mathbb{E}[X(t)|X(u), 0\leq u\leq s]=\mathbb{E}[e^{Y(t)}|Y(u), 0\leq u\leq s]=X(s)\mathbb{E}[e^{Y(t)-Y(s)}|Y(u), 0\leq u\leq s]\]
+Ricordando che la funzione caratteristica di una normale è della forma $e^{\mu t+\frac{\sigma^2t^2}{2}}$ (\ref{char_N}):
+\[\mathbb{E}[X(t)|X(u), 0\leq u\leq s]=X(s)e^{\mu(t-s)+\frac{\sigma^2}{2}(t-s)}\]
+Se $\mu=-\frac{\sigma^2}{2}$ si ottiene la \href{https://en.wikipedia.org/wiki/Martingale_(probability_theory)}{proprietà martingale}.
+
+Come ultimo spunto siano ad esempio $X_n$ i prezzi di un'azione al tempo $n$, sembra ragionevole considerare la variazione percentuale $Y_n=\frac{X_n}{X_{n-1}}$ come IID. Si verifichi (pag. 645 - S.M.Ross) che $\{X_n\}$ è un moto browniano geometrico (\textit{Hint: si scriva $X_n$ in funzione delle $Y_i$ e si usi il teorema ddel limite centrale}).

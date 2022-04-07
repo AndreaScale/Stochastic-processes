@@ -1,0 +1,352 @@
+Si introduce qui il concetto centrale del corso: \textbf{I processi stocastici}.
+Iniziamo con il definire rigorosamente il concetto.
+\begin{definition}
+Sia $\{X(t),t\in T\}$ una famiglia di v.a. definite su uno spazio di probabilità $(\Omega,\mathbf{F},\mathbb{P})$ a valori in uno spazio misurabile $S$, indicizzato da un insieme ordinato $T$:
+\begin{center}
+    $\{X(t),t\in T\}$ è un \textbf{processo stocastico}
+\end{center}
+L'insieme $T$ si definisce \textbf{insieme indice} e l'insieme dei possibili valori assumibili dal processo è lo \textbf{spazio degli stati}.
+\end{definition}
+
+Classicamente un processo stocastico è indicizzato dal \textit{tempo} e dunque l'insieme indice è $\mathbb{R}_+$.
+\begin{example}
+Si pensi come esempi:
+\begin{itemize}
+    \item \textit{I passeggeri su di un bus ogni giorno ad una data ora}
+    \item \textit{I passeggeri su di un bus lungo un giorno}
+    \item \textit{I mm di pioggia in un anno}
+\end{itemize}
+\end{example}
+Sono tutti processi stocastici, dove si nota che l'insieme indice e le v.a. posso prendere valori nel discreto o nel continuo. 
+Un problema immediato e fondamentale nello studio dei processi stocastici è dato dallo studio della probabilità che una v.a. corrispondente ad un determinato tempo (stadio). Infatti per poterne determinare il valore abbiamo bisogno di conoscere le distribuzioni di probabilità congiunte di tutti gli stadi precedenti. Nel caso si stia parlando di v.a. \textit{indipendenti} questo problema è marginale, poichè possiamo riscrivere la congiunta come il prodotto delle singole distribuzioni. Questa condizione è molto forte però, ci viene in contro l'ipotesi di Markov.
+\section{Catene di Markov}
+\begin{definition}
+Dato $\{X(t),t\in T\}$ processo stocastico si definisce \textbf{markoviano} se $\forall n$ vale:
+\[\mathbb{P}(X_n=x_n|X_{n-1}=x_{n-1},...,X_0=x_0)=\mathbb{P}(X_n=x_n|X_{n-1}=x_{n-1})\]
+Una processo di Markov è \textbf{temporalmente omogenea} se $\forall n,m\in\mathbb{N}$: \[P_{ij}(n)=P_{ij}(m)\]
+Dove si denota $P_{ij}(n)=\mathbb{P}(X_n=j|X_{n-1}=i)$.
+\newline
+Un processo markoviano di insieme indice e spazio degli stati discreti si dice \textbf{catena di Markov}.
+\end{definition}
+
+Una catena Markoviana può essere identificata da una \textbf{matrice di transizione}: $P=(P_{ij})$
+\begin{theorem}
+Data $P$ una matrice di transizione e la distribuzione iniziale posso descrivere la distribuzione congiunta di ogni ordine.
+\begin{proof}
+Per induzione sul numero di v.a.
+\begin{itemize}
+    \item $n=1$: \[\mathbb{P}(X_1=x_1,X_0=x_0)=P_{01}\mathbb{P}(X_0=x_0)\] 
+    \item Vale per $n$: \[\mathbb{P}(X_{n+1}=X_{n+1},X_n=x_n,...,X_0=x_0)=\]
+    \[=\mathbb{P}  (X_n=x_n|X_{n-1}=x_{n-1},...,X_0=x_0)\mathbb{P}(X_{n-1}=x_{n-1},...,X_0=x_0)=\] \[=P_{n,n+1}\mathbb{P}(X_{n-1}=x_{n-1},...,X_0=x_0)\]
+    Che è conosciuta per l'ipotesi induttiva.
+\end{itemize}
+\end{proof}
+\end{theorem}
+Si dice \textbf{matrice di transizione di $n$ passi} la seguente: \[P^{(n)}_{ij}=\mathbb{P}(X_{n+m}=j|X_m=i)\]
+\begin{theorem}
+Per una catena di Markov a tempo omogeneno vale: \[P_{ij}^{(n+m)}=\sum_kP^{(n)}_{ik}P^{(m)}_{kj}\]
+\begin{proof}
+\[P^{(n+m)}_{ij}=\mathbb{P}(X_{n+m}=j|X_0=i)=\sum_k\mathbb{P}(X_{n+m}=j, X_n=k|X_0=i)\]
+\[\sum_k\mathbb{P}(X_{n+m}=j|X_n=k,X_0=i)\mathbb{P}(X_n=k|X_0=i)\]
+Ora per l'ipotesi di Markov:
+\[P^{(n+m)}_{ij}=\sum_k\mathbb{P}(X_{n+m}=j|X_n=k)\mathbb{P}(X_n=k|X_0=i)=\sum_kP^{(n)}_{ik}P^{(m)}_{kj}\]
+\end{proof}
+\end{theorem}
+Si osserva dunque che: 
+\begin{itemize}
+    \item $P^{(n+m)}=P^{(n)}\cdot P^{(m)}$
+    \item $P^{(n)}=P^n$
+\end{itemize}
+\subsection{Classificazione degli stati}
+\begin{definition}
+Data una catena di Markov:
+\begin{itemize}
+    \item Uno stato $j$ è \textbf{accessibile} da uno stato $i$ se $\exists n\in\mathbb{N}$ t.c.$P_{ij}^{(n)}>0$. Si denota con $i\longrightarrow j$.
+    \item Due stati $i,j$ sono \textbf{comunicanti} se $i\longrightarrow j$ e $j\longrightarrow i$. Si denota con $i\longleftrightarrow j$.
+\end{itemize}
+Inoltre una catena si dice \textbf{irriducibile} se tutti gli stati sono comunicanti. Uno stato non accessibile da nessun'altro stato si dice \textbf{assorbente}.
+\end{definition}
+Si osserva subito che l'essere comunicanti è una \textit{relazione di equivalenza} (verificare per esercizio), e si può quindi quozientare l'insieme degli stati.
+
+\begin{definition}
+Data una catena di Markov definiamo: \[f_i=\mathbb{P}(\text{Tornare a }i | X_0=i):= \begin{cases}
+=1 & \text{\textbf{Ricorrente}}
+\\ <1 &\text{\textbf{Transiente}}
+\end{cases}\]
+\end{definition}
+\begin{observation} \label{Obs211}
+\begin{itemize}
+    \item Se $i$ è ricorrente il numero dei ritorni a $i$ è infinito
+    \item Se $i$ è transiente il processo abbandona lo stato con probabilità $1-f_i$ e $N$ il numero di passi necessari per lasciare lo stato è una v.a. geometrica con media $\frac{1}{1-f_i}$.
+\end{itemize}
+\end{observation}
+\begin{theorem} \label{Tras_Ric}
+Data una catena di Markov e uno stato $i$:
+\begin{itemize}
+    \item $\sum_{n=0}^{+\infty}P_{ii}^n$ diverge $\Rightarrow$ $i$ è ricorrente
+    \item $\sum_{n=0}^{+\infty}P_{ii}^n$ converge $\Rightarrow$ $i$ è transiente
+\end{itemize}
+\begin{proof}
+Sia: \[A_n= \begin{cases}
+1 & X_n=i
+\\ 0 & X_n\neq i
+\end{cases}\]
+Valutaimo ora il numero medio di volte che il processo passa da $i$, dato che vi era in $X_0$:
+\[\E\left[\sum_{n=0}^{+\infty}A_n | X_0=i\right]=\sum_{n=0}^{+\infty}\E\left[A_n|X_0=i\right]=\sum_{n=0}^{+\infty}P_{ii}^n\]
+Dunque, poichè uno stato è ricorrente se e solo se il numero medio di passaggi è infinito (per l'osservazione \ref{Obs211}), si ottiene la tesi.
+\end{proof}
+\end{theorem}
+Ciò ci porta anche a concludere che:
+\begin{center}
+    \textit{Una catena con un numero finito di stati non può averli tutti transienti.}
+\end{center}
+Inoltre osserviamo che:
+\begin{proposition}
+La ricorrenza è una proprietà di classe.
+\begin{proof}
+Siano $i\longleftrightarrow j$ e $i$ ricorrente. Dunque $\exists n,m\in\mathbb{N}$ t.c. $P_{ij}^n,P_{ji}^m>0$ e $\forall k>0$ si ha:
+\[P^{n+m+k}_{jj}\geq P^m_{ji}P^k_{ii}P^n_{ij}>0\]
+Dunque passando alla sommatoria, poichè $\sum_{k=0}^{+\infty}P_{ii}^k$ diverge per ipotesi, si ottiene la tesi.
+\end{proof}
+\end{proposition}
+
+Ci concentriamo ora su di un esempio classico e fondamentale di catena di Markov, il \textit{cammino casuale}.
+
+\begin{example}
+Definiamo la v.a. del cammino casuale come: $X_n=X_{n-1}+Y_n$ dove $Y_n$ sono IID a valori in $\{-1,1\}$  con $\mathbb{P}(Y=1)=p$. L'origine è transiente o ricorrente? Applichiamo il teorema \ref{Tras_Ric}. Osserviamo subito che:
+\[P_{0,0}^{2n+1}=0\]
+Infatti per poter tornare ad uno stato partendo da esso bisogna per forza compiere un numero di passi pari. Dunque:
+\[\sum_{n=1}^{+\infty}P_{0,0}^n=\sum_{n=1}^{+\infty}P_{0,0}^{2n}=\sum_{n=1}^{+\infty}\binom{2n}{n}p^n(1-p)^n\]
+Ricordando l' \href{https://en.wikipedia.org/wiki/Stirling%27s_approximation}{approssimazione di Stirling}  osserviamo che $\binom{2n}{n}p^n(1-p)^n$ è asintoticamente equivalente a: \[\frac{[4p(1-p)]^n}{\sqrt{\pi n}}\]
+Tramite una facile analisi della convergenza della serie soprascritta:
+\begin{itemize}
+    \item $p=\frac{1}{2}$ l'origine è \textit{ricorrente}
+    \item $p\neq\frac{1}{2}$ l'origine è \textit{transiente}
+\end{itemize}
+Si dimostra che questa relazione vale anche nel caso bidimensionale:
+\[P_{(i,i+1),(j,j)}=P_{(i,i-1),(j,j)}=P_{(i,i),(j,j+1)}=P_{(i,i),(j,j-1)}=\frac{1}{4}\]
+Si impone così la simmetria. Poichè anche nel caso bidimensionale la catena è irriducibile ci limitiamo a studiare la transienza di uno stato, l'origine:
+\[\sum_{n=0}^{+\infty}P_{\textbf{0},\textbf{0}}^n=\sum_{n=0}^{+\infty}\sum_{k=0}^n\frac{(2n)!}{k!k!(n-k)!(n-k)!}\left(\frac{1}{4}\right)^{2n}\]
+La seconda sommatoria e la frazione di fattoriali deriva dal fatto che, per ogni numero $k$ da $0$ a $n$, la catena per tornare nell'origine compie $k$ passi in avanti e $n-k$ in dietro e equivalentemente per su e giù (nell'altra dimensione). Ora:
+\[\sum_{n=0}^{+\infty}\sum_{k=0}^n\frac{(2n)!}{k!k!(n-k)!(n-k)!}\left(\frac{1}{4}\right)^{2n}=\sum_{n=0}^{+\infty}\left(\frac{1}{4}\right)^{2n}\frac{(2n)!}{n!n!}\sum_{k=0}^n\binom{n}{k}\binom{n}{n-k}=\]
+\[\sum_{n=0}^{+\infty}\left(\frac{1}{4}\right)^{2n}\binom{2n}{n}\binom{2n}{n}\]
+Nuovamente tramite Stirling si determina la natura divergente della catena (mediante confronto asisntotico con una geometrica di ragione $1$). 
+
+Si può però dimostrare che per dimensioni superiori alla seconda la catena è sempre transiente.
+%In oltre anche per il cammino casuale bidimensionale vale questa relazione (dimostrato a lezione, se lo chiede all'orale la meno :)), mentre per ogni dimensione superiore \textit{non} vale.
+\end{example}
+
+Vogliamo ora calcolare $\mathbb{P}(\text{Ritorno in }0)$:
+\[\mathbb{P}(\text{Ritorno in }0)=\]
+\[=\mathbb{P}(\text{Ritorno in }0|X_1=1)\mathbb{P}(X_1=1)+\mathbb{P}(\text{Ritorno in }0|X_1=-1)\mathbb{P}(X_1=-1)\]
+Poniamo che $p>\frac{1}{2}$ e dunque $\mathbb{P}(\text{Ritorno in }0|X_1=-1)=1$. Possiamo giustificare questo risultato osservando che, per la legge dei grandi numeri:
+\[\frac{\sum_{i=1}^nY_n}{n}\xrightarrow{n\to +\infty}\E Y\neq0\]
+%\[\hspace{15px} \text{valore finito }\neq0\]
+E dunque la sommatoria delle $Y$ diverge: i salti in alto dominano (le $Y_n$ sono le v.a. della definizione a inizio esempio). Chiamiamo ora $\mathbb{P}(\text{Ritorno in }0|X_1=1)=\alpha$ e ricondizioniamo:
+\[\alpha=\mathbb{P}(\text{Ritorno in }0|X_1=1,X_2=2)p+\mathbb{P}(\text{Ritorno in }0|X_1=1,X_2=0)(1-p)=\]\[=\alpha^2p+1-p\]
+Si sottolinea il non immediato passaggio:
+\[\mathbb{P}(\text{Ritorno in }0|X_1=1,X_2=2)=\mathbb{P}(\text{Ritorno in }0|X_1=1)\mathbb{P}(\text{Ritorno in}1|X_2=2)=\alpha^2\]
+Ottenendo: $\alpha=\frac{1-p}{p}$. 
+\newline
+In definitiva $\mathbb{P}(\text{Ritorno})= \begin{cases}
+2(1-p) & p>\frac{1}{2}
+\\2p & p<\frac{1}{2}
+\end{cases}$
+\vspace{25px}
+
+
+Definiamo ora alcune propietà di uno stato, e equivalentemente di una catena trattandosi di proprietà di classe. Sia:
+\[N_i=min\{n\in\mathbb{N}:X_n=i\}\]
+E conseguentemente:
+\[m_i=\E[N_i|X_0=i]\]
+\begin{definition}
+Dato uno stato ricorrente $i$ si dice:
+\begin{itemize}
+    \item \textbf{positivo ricorrente} se $m_i < +\infty$
+    \item \textbf{negativo ricorrente} se $m_i = +\infty$
+\end{itemize}
+\end{definition}
+Si osserva che per ogni catena di Markov irriducibile a stati finiti questa è positivo ricorrente. Questo perchè:
+\begin{itemize}
+    \item Se fosse transiente allora dopo un numero finito di passi (il massimo tra i numeri di passaggio per ogni stato) non si troverebbe in alcuno stato, assurdo.
+    \item Se fosse negativo ricorrente allora dopo un tempo finito (il massimo tra i tempi di ritorno su ogni stato) non potrebbe tornare su nessuno stato, assurdo.
+\end{itemize}
+Entrambe le considerazioni valgono poichè la catena è irriducibile e transienza e positivo ricorrenza sono proprietà di classe. 
+\begin{definition}
+Il \textbf{periodo} di uno stato $i$ è: \[d(i)=MDC\{n\geq 1 \text{  t.c.  } \mathbb{P}(X_{m+n}=i|X_m=i)>0\}\]
+Uno stato è \textbf{aperiodico} se il suo periodo è 1.
+\end{definition}
+Evidentemente la periodicità è una proprietà di classe.
+\begin{definition}
+Uno stato aperiodico e positivo ricorrente si dice \textbf{ergodico}.
+\end{definition}
+
+\subsection{Distribuzioni Limite e Stazionarie}
+Introduciamo il concetto di distribuzione limite. 
+\begin{definition}
+Una distribuzione $\pi$ per una catena di Markov è \textbf{limite} se è tale che:
+\[\lim_{n\to+\infty}P_{ij}^n=\pi_j \hspace{7px} \forall i\]
+\end{definition}
+\vspace{5px}
+Così possiamo enunciare il seguente teorema, tratteggiandone un'idea della dimostrazione.
+\begin{theorem} \label{Teor_erg}
+Data una catena di markov irriducibile e ergodica allora:
+\begin{itemize}
+    \item $\lim_{n\to+\infty}P_{ij}^n=\pi_j$ esiste finito (esiste una distribuzione limite)
+    \item $\sum_j\pi_j=1$ e $\pi_j$ \textbf{non} dipende da $n$
+    \item $\{\pi_j\}$ sono l'unica soluzione non negativa del sistema: \begin{equation} \label{Sist_erg}
+    \begin{cases}
+    \pi_j=\sum_i\pi_iP_{ij}
+    \\ \sum_j\pi_j=1
+    \end{cases}
+    \end{equation}
+\end{itemize}
+\begin{proof}
+Ammettendo l'esistenza di $\{\pi_j\}$ che soddisfano la prima condizione e verifico che siano soluzione di \ref{Sist_erg}:
+\[\mathbb{P}(X_{n+1}=j)=\sum_i\mathbb{P}(X_{n+1}=j|X_n=i)\mathbb{P}(X_n=i)=\sum_iP_{ij}\mathbb{P}(X_n=i)\]
+Passando al limite, ammettendo che si possa invertire la sommatoria con il limite, si ottiene la tesi.
+\end{proof}
+\end{theorem}
+%Per aiutare la visualizzazione dei $\pi_i$ li si può immaginare come la proporzione di tempo passato dalla catena sullo stato $i$-esimo per $n\longrightarrow+\infty$.
+
+Si faccia particolare attenzione al fatto che il sistema \ref{Sist_erg}, intendendo $\overline{\pi}_j$ come vettore, si riscrive come:
+\[\overline{\pi}_j=\overline{\pi}_i\cdot P\]
+E si deve dunqe rispettare l'ordine di moltiplicazione dei fattori della matrice di transizione con il vettore: il prodotto matriciale \textit{non} commuta.
+
+Passiamo ora a definire un'altra tipologia di distribuzione.
+%\begin{definition}
+%Una distribuzione $\pi=(\pi_i)$ di una catena di Markov con matrice di transizione $P$ è \textbf{stazionaria} se:
+%\[\pi=\pi P\]
+%\end{definition}
+%Ciò che afferma la definizione è che la distribuzione rimane costante nel tempo, non dipende dall'indice scelto.
+%\vspace{5px}
+%Vale a dire che la distribuzione $\overline{\pi}$ (d'ora in avanti sarà solo $\pi$) sarà tale che:
+%\[\mathbb{P}(X_0=i)=\pi_i \Rightarrow \mathbb{P}(X_n=i)=\pi_i \hspace{5px} \forall n\in\mathbb{N}\]
+
+\begin{definition}
+Una distribuzione $\pi=(\pi_i)$ di una catena di Markov è \textbf{stazionaria} se
+:
+\[\mathbb{P}(X_0=j)=\pi_j \Rightarrow \mathbb{P}(X_1=j)=\pi_j \]
+\end{definition}
+Ciò che afferma la definizione è che la distribuzione rimane costante nel tempo. Si verifica infatti (banale dimostrazione per induzione) che una distribuzione è stazionaria se e solo se vale:
+\[\pi=\pi \cdot P\]
+
+\begin{proposition}
+Una distribuzione limite è stazionaria.
+\begin{proof}
+Ammesso che la distribuzione limite dipenda dalla distribuzione iniziale, \textit{i.e.}:
+\[\pi_j^{(i)}=\lim_{n\to+\infty}\mathbb{P}(X_n=j|X_0=i)\]
+Dunque passiamo a calcolare:
+\[\pi_j^{(i)}=\lim_{n\to+\infty}\mathbb{P}(X_n=j|X_0=i)=\]
+\[\lim_{n\to+\infty}\sum_{k}\mathbb{P}(X_n=j|X_{n-1}=k)\mathbb{P}(X_{n-1}=k|X_0=i)=\sum_{k}\lim_{n\to+\infty}P_{kl}\cdot\mathbb{P}(X_{n-1}=k|X_0=i)=\]
+\[\sum_k\pi_k^{(i)}P_{kl}\]
+Dunque la distribuzione è stazionaria.
+\end{proof}
+\end{proposition}
+
+Si può subito osservare però che non vale il contrario: 
+\begin{center}
+    Stazionarietà non implica ammetterre limite
+\end{center}
+Per verificare ciò basta prendere una qualsiasi catena \textit{non} irriducibile che ammette distribuzione staionaria.
+Togliendo l'rriducibilità non vale più il teorema \ref{Teor_erg}, ma anche privandosi dell'\textit{aperiodicità} sorgono dei problemi. In questi casi si può intendere $\pi$ come la proporzione di tempo passato sul quello stato (una distribuzione stazionaria).
+
+Riscrivendo la \ref{Sist_erg} si ottiene l'\textbf{equazione di bilanciamento}:
+\begin{equation} \label{Eq_bil}
+    (1-P_{jj})\pi_j=\sum_{i\neq j}P_{ij}\pi_i
+\end{equation}
+Ricordando invece $m_j$ come il valore atteso delle transizioni necessarie alla catena per tornare a $j$ essendo partita da $j$:
+\begin{equation}
+    m_j=\E[N_j|X_0=j]
+\end{equation}
+Dove $N_j=min\{n>0|X_n=j\}$.
+
+Possiamo enunciare il \textbf{teorema ergodico}. %(Possibile domanda d'esame)
+\begin{theorem}
+Data una catena si Markov irriducibile, la media campionaria del numero di visite allo stato $j$ converge q.c. a $\frac{1}{m_j}$. In formule:
+\[\lim_{n\to+\infty}\frac{1}{n}\sum_{k=0}^n\mathbb{I}_{\{X_k=j\}}=\frac{1}{m_j}\]
+Se la catena è positivo ricorrente:
+\[\lim_{n\to+\infty}\frac{1}{n}\sum_{k=0}^n\mathbb{I}_{\{X_k=j\}}=\pi_j \hspace{15px} \text{Converge q.c.}\]
+Dove $\pi$ è la distribuzione stazionaria. Se la catena è ergodica:
+\[\pi_j=\frac{1}{m_j}\]
+\end{theorem}
+\newpage
+
+\subsection{Esempi di catene di Markov}
+
+\subsubsection{Processi di diramazione}
+I processi di diramazione sono un esempio di catene di Markov con varie applicazioni i numerosi settori della ricerca scientifica. L'idea sostanziale è valutare l'evoluzione di una popolazione i cui membri producono prole.
+
+In una popolazione ogni individuo produce $j$ individui con probabilità $P_j$, indipendentemente dagli altri e con $P_j<1$. Si definisce la catena di Markov:
+\begin{center}
+    $\{X_n\}_{n\geq0}$ che conta il numero di individui della popolazione al tempo $n$
+\end{center}
+$X_i$ è detta $i$-esima \textbf{generazione}. 
+
+Notiamo ad esempio che lo stato $0$ è assorbente e che se $P_0>0$ allora tutti gli stati sono transienti: in particolare la catena o va a $0$ o diverge.
+
+Sia invece:
+\[\mu=\sum_{j=0}^{+\infty}jP_j\]
+Il numero medio di individui generati da un individuo. Osserviamo invece che possiamo riscrivere l'$n$-esima generazione:
+\[X_n=\sum_{i=0}^{X_{n-1}}Z_i\]
+Dove $Z_i$ conta il numero di individui generati dall'$i$-esimo individuo. Dunque:
+\[\mathbb{E}X_n=\mathbb{E}\left[\mathbb{E}\left(X_n|X_{n-1}\right)\right]=\mathbb{E}\left[\mathbb{E}\left(\sum_{i=0}^{X_{n-1}}Z_i|X_{n-1}\right)\right]=\mathbb{E}(X_{n-1}\mathbb{E}Z_i)=\mu\mathbb{E}X_{n-1}\]
+
+Iterando e ponendo $X_0=1$ ottengo $\mathbb{E}X_n=\mu^n$.
+
+Con ragionamenti analogi (relativi alla doppia attesa e tramite il teorema \ref{Varr}) si calcola $\mathbb{V}ar X_n$.
+
+Consideriamo invece la probabilità limite, in particolare $\pi_0$ cioè la probabilità che all'infinito la popolazione si estingua (sempre posto che si parta da un solo individuo). 
+\[\pi_0=\lim_{n\to+\infty}\mathbb{P}(X_n=0|X_0=1)\]
+Si nota che se $\mu<1$ allora $\pi_0=1$, infatti:
+\[\mu^n=\sum_{j=1}^{+\infty}j\mathbb{P}(X_n=j)\geq \sum_{j=1}^{+\infty}\mathbb{P}(X_n=j)=\mathbb{P}(X_n\geq 1)\]
+Dunque:
+\[\mathbb{P}(X_n=0)=1-\mathbb{P}(X_n\geq1)\geq1-\mu^n\xrightarrow{n\to+\infty}1\]
+Dunque per il teorema del confronto (una probabilità è sempre minore o uguale a 1) si ottiene:
+\[\mu<1\Rightarrow\pi_0=1\]
+Si dimostra anche che $\mu=1$ implica $\pi_0=1$.
+
+Più in generale vale:
+\[\pi_0=\sum_{j=1}^{+\infty}\pi_0^jP_j\]
+Dove $\pi_0^j=\mathbb{P}(\text{Popolazione va a }0|X_0=j)$. Per provare quest'uguaglianza basta condizionare rispetto a $P_j$.
+\vspace{15px}
+
+\subsubsection{Rovina del giocatore} \label{Rov_gioc}
+Giocatore fa giocate successive con probabilità $p$ di vincere un euro e $1-p$ di perderlo. Le giocate sono indipendenti. Qual è la probabilità di raggiungere un capitale $N$ prima di andare in rovina?
+\newline
+\textbf{Soluzione.}
+\newline
+Si definisce $X_n=$"fortuna del giocatore  al tempo $n$". Dunque $\{X_n ; n\in\mathbb{N}\}$ è una catena di Markov, un cammino casuale con due barriere. La sua matrice di transizione è una matrice infinita della forma:
+\[P = \begin{bmatrix}
+1& 0 & 0 & 0
+\\q & 0 & p & 0 
+\\0 & q & 0 & p 
+\\0 & 0 & q & 0 
+\end{bmatrix}
+\quad\]
+La catena è dotata di tre classi $\{0\},\{1,2,\dots,N-1\},\{N\}$, dove la prima e la terza sono ricorrenti mentre la seconda è transiente, dunque dopo un tempo finito il giocatore ho vince (finisce in $N$) o perde tutto (finisce in $0$).
+
+Definita $P_i = $ "probabilità di raggiungere $N$ prima di $0$ partendo da $i$":
+\[P_i=(P_i|X_1=i+1)P_{i,i+1}+(P_i|X_1=i-1)P_{i,i-1}=P_{i+1}p+P_{i-1}q\]
+Usando che $p+q=1$ e dunque $P_i=P_ip+P_iq$ si ottiene:
+\[P_{i+1}-P_i=\frac{q}{p}(P_i-P_{i-1})\]
+Dunque:
+\[P_i-P_{i-1}=\frac{q}{p}(P_{i-1}-P_{i-2})=\dots=\left(\frac{q}{p}\right)^{i-1}P_1\]
+Cioè:
+\[\cdot P_i=\sum_{k=0}^{i-1} \left (\frac{q}{p}\right)^k P_1\]
+\[\cdot P_i= \begin{cases}
+\frac{1-\left(\frac{q}{p}\right)^i}{1-\left(\frac{q}{p}\right)}P_1 & p\neq \frac{1}{2}
+\\ iP_1 & p=\frac{1}{2}
+\end{cases}\]
+Usando $P_N=1$:
+\[P_i= \begin{cases}
+\frac{1-\left(\frac{q}{p}\right)^i}{1-\left(\frac{q}{p}\right)^N} & p\neq \frac{1}{2}
+\\ \frac{i}{N} & p=\frac{1}{2}
+\end{cases}\]
+Dunque per $N\rightarrow+\infty$ la $P_i$ converge solo per $p>\frac{1}{2}$, infatti se $p\leq \frac{1}{2}$ le situazioni possono essere:
+\begin{itemize}
+    \item $p=\frac{1}{2}$: Dunque $P_i=\frac{i}{N}\xrightarrow{N\to+\infty}0$
+    \item $p<\frac{1}{2}$: Dunque $p<q$ perciò $\frac{q}{p}>1$ e quindi $1-\left(\frac{q}{p}\right)^N\xrightarrow{N\to+\infty}+\infty$
+\end{itemize}
+
+Il giocatore dunque potrà aumentare il suo capitale indefinitamente solo per una probabilità di vincita maggiore di $1/2$.

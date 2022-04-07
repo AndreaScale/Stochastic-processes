@@ -1,0 +1,166 @@
+\section{processi di conteggio e di Poisson}
+Introduciamo ora una nuova famiglia di processi, i \textbf{processi di conteggio}. I processi di conteggio, come suggerisce il nome, contano il numero di eventi che si verificano in un dato intervallo di tempo. Si passa dunque al continuo per l'insieme indice.
+\begin{definition}
+Il processo stocastico $\{N(t)\}_{t\geq 0}$ è di \textbf{conteggio} se:
+\begin{itemize}
+    \item $N(t)\geq 0$
+    \item $N(t)\in\mathbb{N}$
+    \item $N(t)\leq N(s)$ per $t\leq s$
+    \item La quantità $N(t)-N(s)$ detta \textbf{incremento} conta il numero di eventi nell'intervallo di tempo $(s,t]$
+\end{itemize}
+Un processo è a \textbf{incrementi indipendenti} se il numero di eventi che si verificano su intervalli disgiunti sono variabili aleatorie indipendenti. Un processo è a \textbf{incrementi stazionari} se il numero di eventi che avvengono in un lasso di tempo dipende solo dalla lunghezza di esso, e non dal momento iniziale: \[N(t+s)-N(s)\sim N(t)-N(0)\]
+$\forall s,t\in\mathbb{R}_+$.
+\end{definition}
+Così definiti i processi di conteggio possiamo definire quelli di Poisson.
+\begin{definition}[Poisson 1]
+Un processo di conteggio $\{N(t)\}_{t\geq0}$ è di \textbf{Poisson} se:
+\begin{itemize}
+    \item $N(0)=0$
+    \item A incrementi indipendenti
+    \item A incrementi stazionari (\textit{condizione sovrabbondante. Si può derivare dalle altre.})
+    \item $\mathbb{P}(N(t)-N(s)=k)=\frac{(\lambda(t-s))^k}{k!}e^{-\lambda(t-s)}$
+\end{itemize}
+\end{definition}
+
+Il processo di Poisson può essere definito in altri modi equivalenti, facendo uso degli incrementi possibili in un lasso di tempo infinitesimo. In particolare in $[t,t+h)$ se $h$ è infinitesimo potrà verificarsi al più un evento, quindi:
+\[\mathbb{P}(N(t+h)-N(t)=1)=\lambda he^{-\lambda h}=\lambda h(1-\lambda h + o(h))=\lambda h + o(h)\]
+\[\mathbb{P}(N(t+h)-N(t)=0)=1-\lambda h+o(h)\]
+Dunque si può dare l'equivalente definizione:
+\begin{definition}[Poisson 2]
+Un processo di conteggio $\{N(t)\}_{t\geq0}$ è di \newline \textbf{Poisson} se:
+\begin{itemize}
+    \item $N(0)=0$
+    \item A incrementi indipendenti e stazionari
+    \item $\mathbb{P}(N(h)=1)=\lambda h+o(h)$
+    \item $\mathbb{P}(N(h)\geq2)=o(h)$
+\end{itemize}
+\end{definition}
+Si mostra che le due definizioni sono equivalenti:
+\begin{itemize}
+    \item $1\Rightarrow 2$: è gia stato dimostrato sopra.
+    \item $2\Rightarrow 1$: Sia $u\geq0$ fissato e considero la trasformata di Laplace:
+    \[g(u)=\mathbb{E}\left[e^{-uN(t)}\right]\]
+    Calcolo:
+    \[g(t+h)=\mathbb{E}\left[e^{-uN(t+h)}\right]=\mathbb{E}\left[e^{-u(N(t+h)-N(t)+N(t))}\right]\]
+    Per indipendenza e stazionarietà del processo:
+    \[g(t+h)=\mathbb{E}\left[e^{-uN(h)}\right]\mathbb{E}\left[e^{-uN(t)}\right]=g(t)\mathbb{E}\left[e^{-uN(h)}\right]\]
+    Dunque calcolo:
+    \[\mathbb{E}\left[e^{-uN(h)}\right]=e^{-u\cdot0}(1-\lambda h +o(h))+e^{-u\cdot 1}(\lambda h+o(h))+o(h)=\]
+    \[1-\lambda h+e^{-u}\lambda h+ o(h)\]
+    Ottenendo:
+    \[g(t+h)-g(t)=g(t)\big(h\lambda(e^{-u}-1)+o(h)\big)\]
+    E dunque:
+    \[g'(t)=\lim_{h\to0}\frac{g(t+h)-g(t)}{h}=g(t)\lambda(e^{-u}-1)\]
+    Ottenendo infine:
+    \[\int_0^t\frac{dg}{g}=\int_0^t\lambda(e^{-u}-1) \,dt \Rightarrow g(t)=g(0)e^{\lambda t(e^{-u}-1)}\]
+    Che è la trasformata di Laplace di una Poisson di parametro $\lambda t$.
+\end{itemize}
+\subsection{Intertempi}
+\vspace{5px} 
+Un importante fattore caratterizzante per un processo di Poisson sono gli \textbf{intertempi} tra eventi, cioè:
+\begin{center}
+$T_i$ = Tempo attesa dall'evento $(i-1)$-esimo all'$i$-esimo
+\end{center}
+Studiamone la distribuzione, osservando che $\{T_1>t\}=\{N(t)=0\}$ come eventi:
+\[\mathbb{P}(T_1>t)=\mathbb{P}(N(t)=0)=e^{-\lambda t}\]
+Equivalentemente:
+%osservando che $\{T_2>t|T_1=s\}=\{N(t+s)-N(s)=0\}=\{N(t)=0\}$, si ottiene:
+\[\mathbb{P}(T_2>t|T_1=s)=\frac{\mathbb{P}(T_2>t,T_1=s)}{\mathbb{P}(T_1=s)}=\frac{\mathbb{P}(N(t+s)-N(s)=0,N(s)=1)}{\mathbb{P}(N(s)=1)}\]
+Poichè gli incrementi sono indipendenti si riduce:
+\[\mathbb{P}(N(t+s)-N(s)=0)=e^{-\lambda t}\]
+%Ora si usa questo risultato in:
+%\[\mathbb{P}(T_2>t)=\mathbb{E}(\mathbb{P}(T_2>t|T_1))=\int_0^tse^{-\lambda t} \,ds\]
+%\[(N(t)=0)=e^{-\lambda t}\]
+Dunque, procedendo iterativamente (osservando che $\mathbb{P}(T_2>t|T_1=s)$ \textit{non} dipende da $s$) gli intertempi sono v.a. IID di distribuzione $Exp(\lambda)$. Grazie a questa caratterizzazione si può dare una terza definizione equivalente di Processo di Poisson.
+\begin{definition}[Poisson 3]
+Una processo di conteggio con intertempi IID come esponenziali di parametro $\lambda$ è un processo di Poisson di parametro $\lambda$.
+\end{definition}
+
+\begin{observation}
+Il processo di Poisson è \textit{markoviano} con matrice di transizione:
+\[P=\begin{bmatrix}
+0 & 1 & 0 & \dots \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}\]
+Questo è ovvio poichè il processo può solo salire, e questo evviene con probabilità $1$. In quanto tempo venga invece è caratterizzato dal parametro della Poisson in considerazione.
+\end{observation}
+
+\subsection{Ulteriori proprietà del processo di Poisson}
+Sia $\{N(t)\}$ un processo di Poisson. Ogni evento è suddiviso tra tipo I e tipo II, definiamo $N_1(t)$ e $N_2(t)$ i processi di conteggio che contano rispettivamente i tipi I e II. Si verifica che $\{N_1(t)\},\{N_2(t)\}$ sono due processi di Poisson di parametri $\lambda p$ e $\lambda(1-p)$:
+\begin{itemize}
+    \item $N_1(0)=0$ poichè $N(0)=0$ 
+    \item $N_1$ eredita incrementi indipendenti e stazionari
+    \item \begin{itemize}
+        \item \[\mathbb{P}(N_1(h)=1)=\]
+        \[\mathbb{P}(N_1(h)=1|N(h)=1)\mathbb{P}(N(h)=1)+\mathbb{P}(N_1(h)=1|N(h)\geq2)\mathbb{P}(N(h)\geq2)\]
+        \[p(\lambda h+o(h))+o(h)=\lambda ph+o(h)\]
+        \item 
+        \[\mathbb{P}(N_1(h)\geq2)\leq\mathbb{P}(N_1\geq2)=o(h)\]
+    \end{itemize}
+\end{itemize}
+Equivalentemente si dimostra per $N_2(t)$.\vspace{10px}
+
+Consideriamo due processi di Poisson indipendenti e $S_n^1$ e $S_m^2$ i tempi dell'$n$-esimo e $m$-esimo evento rispettivamente per il processo $1$ e per il $2$. Vogliamo studiare $\mathbb{P}(S_n^1<S_m^2)$.
+\begin{itemize}
+    \item $m=n=1$: \[\mathbb{P}(S_n^1<S_m^2)=\mathbb{P}(T_1<T_2)=\frac{\lambda_1}{\lambda_1+\lambda_2}\]
+    \item $n=2,m=1$: \[\mathbb{P}(S_n^1<S_m^2)=\mathbb{P}(S_2^1<S_1^2|S_1^1<S_1^2)\mathbb{P}(S_1^1<S_1^2)=\]
+    \[\mathbb{P}(S_1^1<S_1^2)\mathbb{P}(S_1^1<S_1^2)=\left(\frac{\lambda_1}{\lambda_1+\lambda_2}\right)^2\]
+\end{itemize}
+%Il ragionamento applicato sfrutta la mancanza di memoria. 
+Ogni volta che si verifica uno dei due processi la probabilità che il prossimo a verificarsi di $1$ è $p_1=\frac{\lambda_1}{\lambda_1+\lambda_2}$ mentre che sia $2$ è $p_2=\frac{\lambda_2}{\lambda_1+\lambda_2}$. Così ragionando si ottiene:
+\[\mathbb{P}(S_n^1<S_m^2)=\sum_{k=n}^{n+m-1}\binom{n+m-1}{k}\left(\frac{\lambda_1}{\lambda_1+\lambda_2}\right)^k\left(\frac{\lambda_2}{\lambda_1+\lambda_2}\right)^{n+m-1-k}\]
+
+\subsection{Distribuzione condizionale dei tempi di arrivo}
+
+Viene chiesto di determinare la distribuzione del tempo necessario affinchè un evento in un processo di Poisson si verifichi, sapendo che un evento si è verificato in $[0,t]$. Poichè il conteggio di Poisson e a incrementi stazionari e indipendenti il tempo di realizzazione deve essere uniformemente distribuito su $[0,t]$:
+\[\mathbb{P}(T_1<s|N(t)=1)=\frac{\mathbb{P}(T_1<s,N(t)=1)}{\mathbb{P}(N(t)=1)}=\frac{\mathbb{P}(N_{[0,s)}=1,N_{[s,t]}=0)}{\mathbb{P}(N(t)=1)}=\]
+\[\frac{\mathbb{P}(N_{[0,s)}=1)\mathbb{P}(N_{[s,t]}=0)}{\mathbb{P}(N(t)=1)}=\frac{\lambda se^{-\lambda s}}{\lambda te^{-\lambda t}}e^{-\lambda(t-s)}=\frac{s}{t}\]
+
+Introduciamo il concetto di statistiche d'ordine.
+\begin{definition}
+Siano $\{Y_n\}$ v.a. IID si dice che $Y_{(1)},...,Y_{(n)}$ sono le \textbf{statistiche d'ordine} corrispondenti se a $Y_{(k)}$ corrisponde il $k$-esimo valore più piccolo tra le v.a.
+\end{definition}
+
+\begin{proposition}
+Date $\{Y_n\}$ v.a.  assolutamente continue IID di densità $f$, allora la densità della statistica d'ordine è:
+\[\overline{f}(y_1,...,y_2)=n!\prod_{i=1}^nf(y_i)\]
+\begin{proof}
+$Y_{(1)},...,Y_{(n)}$ è uguale a $y_{1},...,y_{n}$ se $\{Y_n\}$ è uguale a una delle $n!$ permutazioni di $y_{1},...,y_{n}$. Ora poichè $f(y_1,...,y_2)=\prod_{i=1}^nf(y_i)$ allora si ottiene la tesi.
+\end{proof}
+\end{proposition}
+
+Ora, se $Y_n$ sono uniformemente distribuite su $[0,t]$ allora: \[\overline{f}(y_1,...,y_n)=\frac{n!}{t^n}\]
+Ciò ci porta a:
+\begin{theorem}
+I tempi di arrivo dato $N(t)=n$ hanno la stessa distribuzione della statistica ordinata corrispondente a $n$ v.a. IID uniformemente distribuite su $[0,t]$.
+\begin{proof}
+Si osserva che per $0\geq s_1\geq...\geq s_n$ vale l'uguaglianza di eventi:
+\[\left\{S_1=s_1,...,S_n=s_n,T(t)=n\right\}=\left\{T_1=s_1,...,T_n=s_n-s_{n-1},T_{n+1}>t-s_n\right\}\]
+Dunque:
+\[f(s_1,...,s_n|n)=\frac{f(s_1,...,s_n,n)}{\mathbb{P}(T(t)=n)}=\frac{\lambda e^{-\lambda s_1}\dots\lambda e^{-\lambda (s_n-s_{n-1})}e^{-\lambda (t-s_n)}}{\frac{\left(\lambda t\right)^n}{n!}e^{-\lambda t}}=\frac{n!}{t^n}\]
+\end{proof}
+\end{theorem}
+
+\subsection{Generalizzazioni di processi di Poisson}
+\subsubsection{Porcesso di Poisson nonomogeneo}
+\begin{definition}[Poisson 2]
+Un processo di conteggio $\{N(t)\}_{t\geq0}$ è di \newline \textbf{Poisson nonomogeneo} con \textbf{funzione d'intensità} $\lambda(t)$ se:
+\begin{itemize}
+    \item $N(0)=0$
+    \item A incrementi indipendenti 
+    \item $\mathbb{P}(N(t+h)-N(t)=1)=\lambda(t) h+o(h)$
+    \item $\mathbb{P}(N(t+h)-N(t)\geq2)=o(h)$
+\end{itemize}
+Si definisce inoltre la \textit{funzione del valore atteso di una Poisson nonomogenea}:
+\[m(t)=\int_0^t\lambda(y) \,dy\]
+\end{definition}
+
+Si dimostra che:
+\[\mathbb{P}(N(t+s)-N(t)=n)=e^{m(t+s)-m(t)}\frac{[m(t+s)-m(t)]^n}{n!}\]
+
+\subsubsection{Porcesso di Poisson composto}
+
+Un processo di Poisson si dice \textbf{composto} se è rappresentabile come:
+\[X=\sum_{i=1}^{N(t)}Y_i\]
+Dove $Y_i$ sono v.a. IID e $N(t)$ un processo di Poisson indipendente dalle v.a.

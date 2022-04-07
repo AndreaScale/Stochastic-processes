@@ -1,0 +1,192 @@
+\section{Definizioni}
+\begin{definition}
+Un processo stocastico $\{X(t)\}_{t\geq0}$ a valori sugli interi non negativi è una \textbf{catena di markov a tempo continuo} se:
+\[\mathbb{P}(X(t)=j|X(s)=i,X(u)=x(u),0\leq u<s)=\mathbb{P}(X(t)=j|X(s)=i)\]
+$\forall s,t\geq0$ reali e $\forall i,j,x(u)\in\mathbb{N}^*$.
+\newline
+Se $\mathbb{P}(X(t+s)=j|X(s)=i)$ è indipendente da $s$ allora la catena è a \textbf{incrementi omogenei}. 
+\end{definition}
+
+Si osserva che la condizione di Markovianità implica che,
+%\[\mathbb{P}(X(t+s)=i|X(s)=i)=\mathbb{P}(X(t)=i|X(0)=i)\]
+ considerando $T_i$ il tempo durante il quale il processo rimane nello stato $i$ si ottiene:
+\[\mathbb{P}(T_i>t+s|T_i>s)=\mathbb{P}(T_i>t)\]
+Dunque le $T_i$ sono prive di memoria e quindi esponenziali.
+
+Una definizio equivalente è quindi possibile.
+
+\begin{definition}
+Una catena di Markov è a \textbf{tempo continuo} se:
+\begin{itemize}
+    \item Il tempo trascorso dal processo su uno stato $i$ è un'esponenziale di media $\frac{1}{v_i}$
+    \item Quando il processo lascia uno stato $i$ raggiunge uno stato $j$ con probabilità $P_{ij}$ tale che: $\begin{cases}
+    \sum_{j}P_{ij}=1 \\
+    P_{ij}\geq0 & \forall i,j
+    \end{cases}$
+\end{itemize}
+\end{definition}
+
+Deriva immediatamente che gli intertempi devono essere \textbf{indipendenti}. Così non fosse le informazioni su quanto tempo la catena passa su uno stato influirebbero sulla probabilità di passaggio al successio, in \textit{contrasto} con la markovianità della catena.
+
+\section{Processi di nascita-morte}
+Forse il più importante esempio e applicazione di catene di Markov a tempo continuo sono i modelli di nascita morte.
+\begin{itemize}
+    \item Sia una catena di Markov con stati il numero di individui in una popolazione (spazio degli stati $\mathbb{N}^*$).
+    \item Allo stato $n$ i tempi di nascita e morte sono esponenziali di parametro $\lambda_n,\mu_n$
+\end{itemize}
+Dunque il tempo medio prima di una nascita è $\frac{1}{\lambda_n}$ e quello prima di una morte è $\frac{1}{\mu_n}$. Da questo possiamo ricavare il tempo medio di attesa in uno stato $n$, questo sarà il valore atteso del minimo degli esponenziali di parametro $\lambda_n$ e $\mu_n$, cioè:
+\[\text{"Attesa media in n"}=\frac{1}{v_n}=\frac{1}{\lambda_n+\mu_n}\]
+
+\begin{example}
+Sia un processo nascita-morte di parametri:$\begin{cases}
+\lambda_n=n\lambda+\theta \\
+\mu_n=n\mu
+\end{cases}$.
+Anche detto a crescita lineare con immigrazione e morte lineare.
+\newline
+Si vuole studiare $M(t)=\mathbb{E}X_t$, dove $X_t$ conta gli individui al tempo $t$. Si procede sfruttando la markovianità per determinare una equazione differenziale per lo studio di $M$.
+
+\[M'=lim_{h\to0}\frac{M(t+h)-m(t)}{h}\]
+Ora valuto $M(t+h)$ tramite la doppia attesa:
+\[\mathbb{E}X(t+h)=\mathbb{E}[\mathbb{E}(X(t+h)|X(t))]\]
+nel tempo infinitesimo $h$ la catena può scendere di 1 rimanere invariata o salire di 1. Tutto ciò viene fatto con probabilità:
+\[\mathbb{P}\Big(X(t+h)=X(t)+1\Big)=\mathbb{P}(T_{X(t)}^{\uparrow}<h)=1-e^{-\lambda_{X(t)}h}=\]
+\[1-(1-\lambda_{X(t)}h-o(h))=(\lambda X(t)+\theta)h+o(h)\]
+Dove $T_{X(t)}^{\uparrow}$ è il tempo per fare una transizione in alto da $X(t)$ individui. Con ragionamenti analoghi si ottiene:
+\[X(t+h)=\begin{cases}
+X(t)+1 & \text{con probabilità}: (\lambda X(t)+\theta)h+o(h) \\
+X(t) & \text{con probabilità}: 1-[(\lambda X(t)+\theta+\mu X(t))h + o(h)] \\
+X(t)-1 & \text{con probabilità}: \mu X(t)h + o(h)
+\end{cases}\]
+Dunque ottengo:
+\[M(t+h)=M(t)+(\lambda-\mu)M(t)h+\theta h+o(h)\]
+Quindi raccogliendo e passando al limite ottengo:
+\[M'(t)=(\lambda-\mu)M(t)+\theta\]
+E risolvendo l'equazione differenziale si trova la distribuzione di $M(t)$:
+\[M(t)=\frac{\theta}{\lambda-\mu}(e^{(\lambda-\mu)t}-1)+X(0)e^{(\lambda-\mu)t}\]
+\end{example}
+
+\subsection{Funzione di transizione di probabilità}
+
+Si vuole ora definire ora un'equivalente delle equazioni di Chapman-Kolmogorov per le catene di Markov a tempo continuo. Definiamo:
+\[\mathbb{P}(X(t+s)=j|X(s)=i)=P_{ij}(t)\]
+Come \textbf{funzione di transizione di probabilità}. Invece siano:
+$\begin{cases}
+v_i : \text{Tasso di abbandono di i} \\
+q_{ij} : \text{Tasso con cui da i si va in j}
+\end{cases}$
+
+E osserviamo $q_{ij}=v_iP_{ij}$ e che:
+\[\mathbb{P}(X(t+h)=j|X(t)=i)=\mathbb{P}(T(i)^j\leq h)=1-e^{-q_{ij}h}=q_{ij}h+o(h)\]
+Dove $T(i)^j$ è il tempo per passare da $i$ a $j$, e:
+\[P_{ij}=\frac{q_{ij}}{\sum_jq_{ij}}\]
+Tramite i due seguenti lemmi arriviamo alla formulazione dell'equazione differenziale che caratterizzerà un equazione di Markov a tempi continui.
+\begin{lemma}
+\[\cdot \lim_{h\to0}\frac{1-P_{ii}(h)}{h}=v_i\]
+\[\cdot \lim_{h\to0}\frac{P_{ij}(h)}{h}=q_{ij}\]
+\vspace{5px}
+\begin{proof}
+$\cdot 1-P_{ii}(h)=v_ih+o(h)$
+Diviso $h$ al limite vale $v_i$.
+
+$\cdot P_{ij}(h)=q_{ij}h+o(h)$
+Diviso $h$ al limite vale $q_{ij}$.
+\end{proof}
+\end{lemma}
+
+\begin{lemma}
+$\forall s,t>0$ vale: 
+\[P_{ij}(t+s)=\sum_{k=0}^{+\infty}P_{ik}(t)P_{kj}(s)\]
+\begin{proof}
+Si condiziona.
+\end{proof}
+\end{lemma}
+
+Dunque si può finalmente enunciare il seguente teorema.
+\begin{theorem}[Kolmogorov Backward]
+$\forall i,j$ e $t\geq0$ vale:
+\[P^{'}_{ij}(t)=\sum_{k\neq i}\left(q_{ik}P_{kj}(t)\right)-v_iP_{ij}(t)\]
+\begin{proof}
+Inizio a valutare grazie al secondo lemma:
+\[P_{ij}(t+h)-P_{ij}(t)=\sum_kP_{ik}(h)P_{kj}(t)-P_{ij}(t)=\sum_{k\neq i}P_{ik}(h)P_{kj}(t)-(1-P_{ii}(h))P_{ij}(t)\]
+Dunque dividendo per $h$ e passando al limite, tramite il primo lemma ottengo la tesi.
+\end{proof}
+\end{theorem}
+
+Un simile risultato si ottiene nel seguente teorema.
+
+\begin{theorem}[Kolmogorov Forward]
+$\forall i,j$ e $t\geq0$ vale:
+\[P^{'}_{ij}(t)=\sum_{k\neq j}\left(q_{kj}P_{ik}(t)\right)-v_jP_{ij}(t)\]
+\end{theorem}
+\begin{proof}
+Si dimostra equivalentemente al teorema precedente, condizionando su $(0,t)\cup(t,t+h)$.
+\end{proof}
+
+\section{Distribuzioni limite}
+
+In analogia con il caso discreto definiamo:
+\[P_j=\lim_{t\to+\infty}P_{ij}(t)\]
+
+Dunque, ammessa l'esistenza di questo limite ricaviamo le \textbf{equazioni di bilanciamento} in questo modo:
+\[\lim_{t\to+\infty}P^{'}_{ij}(t)=\lim_{t\to+\infty}\left[\sum_{k\neq j}q_{kj}P_{ik}(t)-v_{j}P_{ij}(t)\right]=\sum_{k\neq j}q_{kj}P_k-v_{j}P_j\]
+
+Poichè $P_{ij}(t)$ è limitata in $[0,1]$ al limite la derivata deve essere nulla, se così non fosse al limite la funzione uscirebbe dall'intervallo. Dunque, imponendo $\lim_{t\to+\infty}P_{ij}^{'}(t)=0$ si ottiene la vera e propria equazione di bilanciamento:
+%Ponendo $P^{'}_{ij}(t)=0$ come condizione di stazionarietà della distribuzione limite si ottiene la vera e propria equazione di bilanciamento:
+\begin{equation}\label{Eq_bil}
+\sum_{k\neq j}q_{kj}P_k=v_jP_j    
+\end{equation}
+
+\newpage
+Dove:
+\begin{itemize}
+    \item $\sum_{k\neq j}q_{kj}P_k$ è il tasso di entrata in $j$ (da ogni stato $k$)
+    \item $v_jP_j$ è il tasso di uscita da $j$
+\end{itemize}
+Dunque l'equzione di bilanciamento, come suggerisce il nome, impone che i tassi di entrata ed uscita da uno stato per una distribuzione limite siano uguali. Questo è in completo accordo con il caso discreto, e riafferma la natura stazionaria di una distribuzione limite.
+
+Nella derivazione della \ref{Eq_bil} abbiamo dato per vera l'esistenza della distribuzione limite, della quale possiamo però fornire delle condizioni sufficienti:
+\begin{itemize}
+    \item La catena è irriducibile
+    \item La catena è positivo ricorrente
+\end{itemize}
+
+Si presenta ora un esempio pregno di significato, la cui risoluzione può fare da modello per altri esercizi.
+\begin{example}
+Sia processo di nascita morte: $\begin{cases}
+\lambda_n=1 & n=0,1,\dots \\
+\mu_n=n & n=1,2,\dots
+\end{cases}$
+
+
+Ora per calcolare il tempo medio di passaggio definendo $T_i$ tempo per andare da $i$ a $i+1$, si ha banalmente per $n=0$:
+\[\mathbb{E}T_0=\frac{1}{\lambda_0}=1\]
+Mentre per $n\neq1$ definiamo $I_i=\begin{cases}
+1 & i\longrightarrow i+1 \\
+0 & i\longrightarrow i-1
+\end{cases}$, dunque:
+\[\begin{cases}
+\mathbb{P}(I_i=1)=\mathbb{P}\left(min\{\lambda_i,\mu_i\}=\lambda_i\right)=\frac{\lambda_i}{\lambda_i+\mu_i} \\
+\mathbb{P}(I_i=0)=\mathbb{P}\left(min\{\lambda_i,\mu_i\}=\mu_i\right)=\frac{\mu_i}{\lambda_i+\mu_i}
+\end{cases}\]
+Mentre:
+\[\begin{cases}
+\mathbb{E}(T_i|I_i=1)=\frac{1}{\lambda_i+\mu_i} & \text{Basta far passare il tempo minimo tra i due} \\
+\mathbb{E}(T_i|I_i=0)=\frac{1}{\lambda_i+\mu_i}+\mathbb{E}T_{i-1}+\mathbb{E}T_i & \text{Si scende e bisogna risalire: si sommano i tempi}
+\end{cases}\]
+Dunque in definitiva, nel nostro caso:
+\[\mathbb{E}T_i=\mathbb{E}\left[\mathbb{E}\left(T_i|I_i\right)\right]=\left(\frac{1}{i+1}\right)^2+\frac{i}{i+1}\left[\frac{1}{i+1}+\mathbb{E}T_{i-1}+\mathbb{E}T_i\right]\]
+\end{example}
+
+Ultimo esempio di processo nascita morte è la coda M/M/s. 
+
+\begin{example}Si considerino $s$ sportelli che hanno tasso di risoluzione  $\mu$ (liberano il cliente) indipendentemente, e un arrivo a tasso $\lambda$. Dunque si può modellare il processo come una processo nascita-morte con:
+\[\begin{cases}
+\lambda_n=\lambda \\
+\begin{cases}
+\mu_n=n\mu & n\leq s \\
+\mu_n=s\mu & n>s
+\end{cases}
+\end{cases}\]
+Questo è vero poichè se $n\leq s$ il tempo di morte (liberazione di uno sportello) è il minimo tra gli $n$ sportelli, dunque il minimo di esponenziali IID di parametro $\mu$. Se $n>s$ il tempo di morte è il minimo tra tutti gli gli sportelli, quindi tra gli $s$ sportelli.
+\end{example}
