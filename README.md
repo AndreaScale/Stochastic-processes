@@ -1,4 +1,2 @@
 # Calcolo-Probablit-2
-Appunti di calcolo delle probabilità 2 (2021)
-
-Ciao
+Lecture notes from the course on stochastic processes held by Prof. Laura Lea Sacerdote in 2021.
